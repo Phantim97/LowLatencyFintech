@@ -5,4 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(LowLatencyFintech main.cpp
         basics.cpp
-        basics.h)
+        basics.h
+        RingBuffer.h
+)
