@@ -9,4 +9,6 @@ add_executable(LowLatencyFintech main.cpp
         RingBuffer.h
         mem_pool.h
         macros.h
+        lock_free_q.h
+        thread_utils.h
 )

@@ -70,11 +70,61 @@ void ring_buffer_ex()
 	rb.print_top();
 }
 
+#include "lock_free_q.h"
+#include "thread_utils.h"
+#include <thread>
+
+void LFQ_Consume(LFQueue<MyData>* lfq)
+{
+	using namespace std::chrono_literals;
+	std::this_thread::sleep_for(5s);
+
+	while (lfq->size())
+	{
+		const MyData* d = lfq->get_next_to_read();
+		if (d != nullptr)
+		{
+			lfq->update_read_idx();
+
+			std::cout << "Consume function read: " << d->d[0] << ", " << d->d[1] << ", " << d->d[2] << " | LFQ SZ: "
+			          << lfq->size() << '\n';
+		}
+		std::this_thread::sleep_for(1s);
+	}
+
+	std::cout << "Exiting Consume Function\n";
+}
+
+void LFQ_test()
+{
+	using namespace std::chrono_literals;
+
+	LFQueue<MyData> lfq(20);
+	std::thread* ct = launch_thread(-1, "", LFQ_Consume, &lfq);
+	//std::thread* ct2 = launch_thread(-1, "", LFQ_Consume, &lfq);
+
+	for (size_t i = 0; i < 50; i++)
+	{
+		const MyData d{static_cast<int>(i), static_cast<int>(i*10), static_cast<int>(i * 100)};
+		*(lfq.get_next_write_loc()) = d;
+		lfq.update_write_idx();
+
+		std::cout << "Main constructed elem: " << d.d[0] << ", " << d.d[1] << ", " << d.d[2] << " | LFQ SZ: " << lfq.size() << '\n';
+		std::this_thread::sleep_for(1s);
+	}
+
+	ct->join();
+	//ct2->join();
+
+	std::cout << "Main exiting";
+}
+
 int main()
 {
     //basic_main();
     //order_book_ex();
 
-	mempool_ex();
+	//mempool_ex();
+	LFQ_test();
     return 0;
 }
