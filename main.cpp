@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "basics.h"
 #include "RingBuffer.h"
@@ -86,9 +87,11 @@ void LFQ_Consume(LFQueue<MyData>* lfq)
 		{
 			lfq->update_read_idx();
 
-			std::cout << "Consume function read: " << d->d[0] << ", " << d->d[1] << ", " << d->d[2] << " | LFQ SZ: "
-			          << lfq->size() << '\n';
+            std::stringstream ss;
+            ss << "Consume function read: " << d->d[0] << ", " << d->d[1] << ", " << d->d[2] << " | LFQ SZ: " << lfq->size() << '\n';
+			std::cout << ss.str();
 		}
+
 		std::this_thread::sleep_for(1s);
 	}
 
@@ -109,7 +112,10 @@ void LFQ_test()
 		*(lfq.get_next_write_loc()) = d;
 		lfq.update_write_idx();
 
-		std::cout << "Main constructed elem: " << d.d[0] << ", " << d.d[1] << ", " << d.d[2] << " | LFQ SZ: " << lfq.size() << '\n';
+        std::stringstream ss;
+        ss << "Main constructed elem: " << d.d[0] << ", " << d.d[1] << ", " << d.d[2] << " | LFQ SZ: " << lfq.size() << '\n';
+
+		std::cout << ss.str();
 		std::this_thread::sleep_for(1s);
 	}
 

@@ -16,11 +16,12 @@
 inline bool setThreadCore(int core_id) noexcept
 {
 #ifndef __APPLE__
-	thread_affinity_policy_data_t policy;
-	policy.affinity_tag = core_id;
+	cpu_set_t cpuset;
 
-	pthread_t thread = pthread_self();
-	return (pthread_set_properties_np(thread, PTHREAD_PROPERTY_AFFINITY_TAG, &policy) == 0);
+    CPU_ZERO(&cpuset);
+    CPU_SET(core_id, &cpuset);
+
+    return (pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset) == 0);
 #else
 	return true;
 #endif
