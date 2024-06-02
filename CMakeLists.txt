@@ -11,4 +11,6 @@ add_executable(LowLatencyFintech main.cpp
         macros.h
         lock_free_q.h
         thread_utils.h
+        time_utils.h
+        Logger.h
 )
