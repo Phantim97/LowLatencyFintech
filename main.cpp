@@ -4,6 +4,7 @@
 #include "basics.h"
 #include "RingBuffer.h"
 #include "mem_pool.h"
+#include "Logger.h"
 
 template <typename T>
 void print_buffer(RingBuffer<T>& r)
@@ -125,12 +126,33 @@ void LFQ_test()
 	std::cout << "Main exiting";
 }
 
+void log_test()
+{
+	using namespace Common;
+
+	char c = 'd';
+	int i = 3;
+	float f = 9.8f;
+	unsigned long u = 50;
+	double d = 34.43;
+	const char* cc = "C-String";
+	std::string s = "Testing string";
+
+	Logger console("logging_example.txt");
+
+	console.log("Logging a char: % an int: % and an unsigned: %\n", c, i, u);
+	console.log("Logging a float: % and a double: %\n", f, d);
+	console.log("Logging a cstr: % \n", cc);
+	console.log("Logging a string % \n", s);
+}
+
 int main()
 {
     //basic_main();
     //order_book_ex();
 
 	//mempool_ex();
-	LFQ_test();
+	//LFQ_test();
+	log_test();
     return 0;
 }
