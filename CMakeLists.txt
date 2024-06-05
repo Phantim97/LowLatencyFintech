@@ -13,4 +13,6 @@ add_executable(LowLatencyFintech main.cpp
         thread_utils.h
         time_utils.h
         Logger.h
+        socket_utils.h
+        socket_utils.cpp
 )

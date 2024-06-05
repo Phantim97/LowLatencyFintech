@@ -79,6 +79,12 @@ struct st_log_t<char>
 	static constexpr bool val = true;
 };
 
+template<>
+struct st_log_t<bool>
+{
+	static constexpr bool val = true;
+};
+
 template<typename T> constexpr bool is_matching = st_log_t<T>::val;
 
 //using template - type alias
@@ -308,6 +314,10 @@ namespace Common
 			{
 				push_value(LogElement {LogType::DOUBLE, value});
 			}
+			else if constexpr (std::is_same_v<T, bool>)
+			{
+				push_value(LogElement {LogType::INTEGER, static_cast<int>(value)});
+			}
 		}
 
 		void push_value(const char *value) noexcept
@@ -334,7 +344,7 @@ namespace Common
 				{
 					if ((*(s + 1) == '%')) [[unlikely]]
 					{
-						++s;
+						s++;
 					}
 					else
 					{
@@ -356,7 +366,7 @@ namespace Common
 				{
 					if ((*(s + 1) == '%')) [[unlikely]]
 					{
-						++s;
+						s++;
 					}
 					else
 					{
